@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VahanDesk by kalyan-engineer25 | Second Hand Vehicle Listing and Enquiry Management System</title>
+<meta name="description" content="Java, JDBC and MySQL project with CRUD on Vehicle and Enquiry tables.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚗</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f4f2ee;--ink:#14181b;--mute:#5d6663;--green:#0f3d2e;--brass:#b08d4f;--line:#dcd8cf;--card:#fff;
+--serif:'Fraunces',Georgia,'Times New Roman',serif;--sans:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.08;letter-spacing:-.015em}
+h2{font-size:clamp(1.9rem,3.6vw,2.7rem);margin-bottom:12px}
+.brand small{font:500 .72rem var(--sans);color:var(--mute);margin-left:8px}
+.eyebrow{font:700 .78rem var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#e9d5a4;margin-bottom:16px}
+.lead{color:var(--mute);max-width:58ch}
+section{padding:80px 0}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+.brand{font:700 1.3rem var(--serif);text-decoration:none;color:var(--green)}
+nav ul{display:flex;gap:26px;list-style:none;padding:0;align-items:center}
+nav a{text-decoration:none;color:var(--mute);font-size:.95rem}nav a:hover{color:var(--ink)}
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;background:var(--green);color:#fff!important;font:700 .95rem var(--sans);text-decoration:none;border:0;cursor:pointer;transition:background .2s}
+.btn:hover{background:#17604a}.btn.alt{background:transparent;color:var(--ink)!important;border:1.5px solid var(--ink)}.btn.alt:hover{background:var(--ink);color:#fff!important}
+
+/* hero */
+.stage{border-radius:28px;overflow:hidden;color:#fff;background:radial-gradient(900px 420px at 70% 55%,#3b434a,#171b1e 62%,#0d0f11);display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;min-height:520px;position:relative}
+.stage .copy{padding:56px 0 56px 56px;position:relative;z-index:2}
+.stage h1{font-size:clamp(2.3rem,4.6vw,3.8rem);margin-bottom:18px}
+.stage p{color:#b9c3bf;max-width:42ch;margin-bottom:28px}
+.stage .btn{background:#e9d5a4;color:#1b1608!important}.stage .btn:hover{background:#f6e6bd}
+.stage .btn.alt{background:transparent;color:#fff!important;border-color:#6b777a}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-car{position:relative;padding:20px 30px 60px 0}
+.hero-car svg{width:100%;height:auto;display:block;filter:drop-shadow(0 30px 28px rgba(0,0,0,.55))}
+.hero-car .floor{position:absolute;left:8%;right:12%;bottom:44px;height:34px;background:radial-gradient(closest-side,rgba(233,213,164,.35),transparent);}
+.spec{position:absolute;background:rgba(20,24,27,.72);backdrop-filter:blur(8px);border:1px solid #4a5559;border-radius:12px;padding:10px 14px;font-size:.8rem;color:#cdd6d2}
+.spec b{display:block;font:700 1.05rem var(--serif);color:#fff}
+.s1{top:36px;right:34px}.s2{bottom:22px;left:6%}
+.hero-img{position:absolute;inset:0}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:26px;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.facts div{padding:20px 24px;border-left:1px solid var(--line)}.facts div:first-child{border:0}
+.facts b{display:block;font:700 1.5rem var(--serif);color:var(--green)}.facts span{color:var(--mute);font-size:.9rem}
+
+/* inventory */
+.bar{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font:500 .9rem var(--sans);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:box-shadow .25s,transform .25s}
+.card:hover{box-shadow:0 22px 40px -22px rgba(20,24,27,.45);transform:translateY(-3px)}
+.photo{position:relative;aspect-ratio:16/10;background:linear-gradient(#e9e6df,#d3cfc5);display:grid;place-items:center;padding:22px}
+.photo svg{width:100%;height:auto;filter:drop-shadow(0 12px 10px rgba(0,0,0,.28))}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.badge{position:absolute;top:14px;left:14px;z-index:2;padding:5px 12px;border-radius:999px;font:700 .75rem var(--sans);background:#fff;color:var(--green)}
+.badge.sold{background:#2a2f33;color:#fff}
+.info{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.info h3{font-size:1.3rem}
+.meta{display:flex;gap:8px;flex-wrap:wrap}.meta span{font-size:.8rem;color:var(--mute);background:var(--paper);padding:4px 10px;border-radius:6px}
+.price{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.price b{font:700 1.45rem var(--serif)}
+.price button{padding:9px 18px;font-size:.88rem}
+.price button:disabled{background:#c9c5bb;cursor:not-allowed}
+
+/* enquiries */
+.tools{display:flex;gap:12px;margin-bottom:14px}.tools input{flex:1}.tools select{width:auto;padding:11px 14px}
+.brands{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}.brands button{padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:transparent;font:500 .82rem var(--sans);color:var(--mute);cursor:pointer}.brands button[aria-pressed=true]{border-color:var(--green);color:var(--green);background:#e6efe9}
+.admin{display:flex;gap:16px;font-size:.8rem}.admin button{background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+dialog select{width:100%;padding:11px 13px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.desk{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:30px}
+.row{display:grid;grid-template-columns:1.2fr 1.2fr 1.6fr 150px 44px;gap:14px;align-items:center;padding:16px 24px;border-top:1px solid var(--line);font-size:.95rem}
+.row.head{background:var(--ink);color:#d8d5cc;border:0;font-weight:700;font-size:.82rem}
+.row small{color:var(--mute);display:block}
+select{font:500 .9rem var(--sans);padding:7px 10px;border-radius:8px;border:1.5px solid var(--line);background:#fff}
+.del{background:none;border:0;font-size:1.1rem;cursor:pointer;color:#a04a3c;border-radius:8px;padding:6px}.del:hover{background:#f5e3df}
+.empty{padding:28px;color:var(--mute);text-align:center}
+
+/* tech */
+.dark{background:var(--ink);color:#e8e5dc;border-radius:28px;padding:56px}
+.dark .lead{color:#a5afab}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:16px;align-items:center;margin:34px 0}
+.flow div{border:1px solid #384046;border-radius:14px;padding:18px 20px}.flow b{display:block;font:700 1.1rem var(--serif);color:#e9d5a4}.flow span{font-size:.85rem;color:#a5afab}
+.flow i{font-style:normal;color:var(--brass);font-size:1.4rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+pre{background:#0c0f11;border:1px solid #2c3438;border-radius:14px;padding:20px;overflow-x:auto;font:.82rem/1.7 var(--mono);color:#c8d3ce}
+.k{color:#e9d5a4}.s{color:#8fd6a8}.c{color:#6c7a75}
+ol.steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s;margin-top:32px}
+ol.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;color:var(--mute);font-size:.94rem}
+ol.steps li::before{content:counter(s);display:block;font:700 2rem var(--serif);color:var(--brass);margin-bottom:6px}
+ol.steps b{color:var(--ink)}
+code.i{font-family:var(--mono);font-size:.82em;color:var(--green);word-break:break-all}
+footer{padding:44px 0;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--mute);font-size:.92rem;border-top:1px solid var(--line)}
+footer b{font:700 1.1rem var(--serif);color:var(--ink)}
+
+dialog{border:0;border-radius:20px;padding:30px;width:min(440px,92vw);box-shadow:0 40px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,14,12,.55)}
+dialog h3{font-size:1.4rem;margin-bottom:4px}dialog p{color:var(--mute);font-size:.9rem;margin-bottom:16px}
+label{display:block;font-size:.85rem;font-weight:700;margin:12px 0 5px}
+input,textarea{width:100%;font:400 1rem var(--sans);padding:11px 13px;border-radius:10px;border:1.5px solid var(--line)}
+.acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+@media(max-width:960px){.stage{grid-template-columns:1fr}.stage .copy{padding:40px 30px 0}.hero-car{padding:10px 20px 50px}
+.cards{grid-template-columns:1fr 1fr}.facts,ol.steps{grid-template-columns:1fr 1fr}.facts div:nth-child(3){border-left:0}
+.two{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.flow i{display:none}nav ul li:not(:last-child){display:none}.dark{padding:34px 24px}}
+@media(max-width:640px){.cards,ol.steps,.facts{grid-template-columns:1fr}.facts div{border-left:0;border-top:1px solid var(--line)}
+.row{grid-template-columns:1fr 1fr;gap:8px}.row.head{display:none}.spec{display:none}section{padding:56px 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<!-- shared car artwork -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".45" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bcd3df"/><stop offset="1" stop-color="#2b3a45"/></linearGradient>
+<radialGradient id="rim"><stop offset="0" stop-color="#f2f2f2"/><stop offset="1" stop-color="#8b9399"/></radialGradient>
+<g id="wheel"><circle r="31" fill="#0a0c0d"/><circle r="26" fill="#1b1e20"/><circle r="17" fill="url(#rim)"/><g stroke="#5a6269" stroke-width="3"><path d="M0-15V15M-15 0H15M-10.6-10.6L10.6 10.6M10.6-10.6L-10.6 10.6"/></g><circle r="4" fill="#2b3035"/></g>
+<symbol id="hatch" viewBox="0 0 400 160">
+<ellipse cx="200" cy="146" rx="175" ry="9" fill="#000" opacity=".25"/>
+<path d="M28 116V94Q30 82 48 78L92 70Q114 42 152 38H232Q264 40 284 66L342 74Q370 80 372 100V116Z" fill="var(--c)" stroke="rgba(0,0,0,.35)"/>
+<path d="M28 116V94Q30 82 48 78L92 70Q114 42 152 38H232Q264 40 284 66L342 74Q370 80 372 100V116Z" fill="url(#gloss)"/>
+<path d="M112 68Q124 48 152 46H186V70ZM196 46H232Q252 48 268 68L196 70Z" fill="url(#glass)"/>
+<path d="M30 100H370" stroke="rgba(0,0,0,.25)"/><rect x="352" y="88" width="18" height="8" rx="3" fill="#ffe9a8"/><rect x="28" y="90" width="12" height="9" rx="3" fill="#c62a2a"/>
+<g fill="none" stroke="rgba(0,0,0,.35)"><path d="M190 48V112M120 74L112 112"/></g><rect x="166" y="84" width="16" height="3.5" rx="2" fill="rgba(0,0,0,.45)"/><path d="M106 70l-10 4 12 3z" fill="var(--c)" stroke="rgba(0,0,0,.4)"/><circle cx="100" cy="116" r="34" fill="#0a0c0d" opacity=".9"/><circle cx="300" cy="116" r="34" fill="#0a0c0d" opacity=".9"/><use href="#wheel" x="100" y="116"/><use href="#wheel" x="300" y="116"/></symbol>
+<symbol id="sedan" viewBox="0 0 400 160">
+<ellipse cx="200" cy="146" rx="182" ry="9" fill="#000" opacity=".25"/>
+<path d="M14 116V98Q16 88 38 84L110 74Q142 46 192 44H252Q292 48 314 74L374 84Q394 90 394 106V116Z" fill="var(--c)" stroke="rgba(0,0,0,.35)"/>
+<path d="M14 116V98Q16 88 38 84L110 74Q142 46 192 44H252Q292 48 314 74L374 84Q394 90 394 106V116Z" fill="url(#gloss)"/>
+<path d="M126 72Q146 52 192 52H212V74ZM222 52H250Q280 54 298 74L222 74Z" fill="url(#glass)"/>
+<path d="M16 104H392" stroke="rgba(0,0,0,.25)"/><rect x="372" y="92" width="20" height="8" rx="3" fill="#ffe9a8"/><rect x="14" y="94" width="12" height="9" rx="3" fill="#c62a2a"/>
+<g fill="none" stroke="rgba(0,0,0,.35)"><path d="M217 52V112M132 76L124 112"/></g><rect x="192" y="88" width="16" height="3.5" rx="2" fill="rgba(0,0,0,.45)"/><path d="M128 74l-12 5 14 3z" fill="var(--c)" stroke="rgba(0,0,0,.4)"/><circle cx="98" cy="116" r="34" fill="#0a0c0d" opacity=".9"/><circle cx="314" cy="116" r="34" fill="#0a0c0d" opacity=".9"/><use href="#wheel" x="98" y="116"/><use href="#wheel" x="314" y="116"/></symbol>
+<symbol id="suv" viewBox="0 0 400 160">
+<ellipse cx="200" cy="148" rx="175" ry="9" fill="#000" opacity=".25"/>
+<path d="M24 122V92Q26 80 46 76L84 68Q98 40 132 36H282Q318 38 332 64L362 72Q380 80 380 100V122Z" fill="var(--c)" stroke="rgba(0,0,0,.35)"/>
+<path d="M24 122V92Q26 80 46 76L84 68Q98 40 132 36H282Q318 38 332 64L362 72Q380 80 380 100V122Z" fill="url(#gloss)"/>
+<path d="M104 66Q114 46 136 44H190V68ZM200 44H280Q306 46 316 66L200 68Z" fill="url(#glass)"/>
+<path d="M26 108H378" stroke="rgba(0,0,0,.25)"/><path d="M96 36H318" stroke="#2a2f33" stroke-width="4" opacity=".55"/><rect x="360" y="88" width="18" height="9" rx="3" fill="#ffe9a8"/><rect x="24" y="92" width="12" height="10" rx="3" fill="#c62a2a"/>
+<g fill="none" stroke="rgba(0,0,0,.35)"><path d="M195 44V120M108 70L100 120"/></g><rect x="170" y="88" width="16" height="3.5" rx="2" fill="rgba(0,0,0,.45)"/><path d="M104 66l-10 5 12 3z" fill="var(--c)" stroke="rgba(0,0,0,.4)"/><circle cx="100" cy="122" r="34" fill="#0a0c0d" opacity=".9"/><circle cx="306" cy="122" r="34" fill="#0a0c0d" opacity=".9"/><use href="#wheel" x="100" y="122"/><use href="#wheel" x="306" y="122"/></symbol>
+</defs></svg>
+
+<div class="wrap">
+<nav>
+  <a class="brand" href="#top">VahanDesk<small>by kalyan-engineer25</small></a>
+  <ul><li><a href="#stock">Stock</a></li><li><a href="#desk">Enquiries</a></li>
+  <li><a class="btn" href="https://github.com/YOUR-USERNAME/vehicle-enquiry-management-system" target="_blank" rel="noopener">GitHub</a></li></ul>
+</nav>
+
+<header class="stage" id="top">
+  <div class="copy">
+    <div class="eyebrow">Designed and developed by kalyan-engineer25</div>
+    <h1>Pre-owned vehicles, managed end to end.</h1>
+    <p>Browse pre-owned cars from India, Germany, Japan and beyond. List a vehicle, send an enquiry and track every lead from first call to closed deal.</p>
+    <div class="cta"><a class="btn" href="#stock">Browse the stock</a><a class="btn alt" href="#desk">Enquiry desk</a></div>
+  </div>
+  <div class="hero-car">
+    <div class="floor"></div>
+    <svg viewBox="0 0 400 160" style="--c:#1d4a3a" role="img" aria-label="Illustration of a sedan"><use href="#sedan"/></svg>
+    <div class="spec s1"><b>35+ cars</b>Indian, German and more</div>
+    <div class="spec s2"><b>Live enquiries</b>tracked in one desk</div>
+  </div>
+</header>
+
+<div class="facts">
+  <div><b id="fa">0</b><span>Vehicles listed</span></div>
+  <div><b id="fb">0</b><span>Available now</span></div>
+  <div><b id="fc">0</b><span>Open enquiries</span></div>
+  <div><b id="fd">0</b><span>Brands</span></div>
+</div>
+</div>
+
+<section id="stock"><div class="wrap">
+  <div class="bar">
+    <div><h2>Available stock</h2><p class="lead">Browse by country, body type or brand. Press Enquire to contact the dealer about any car.</p><button class="btn" id="addv" type="button" style="margin-top:16px">+ List a vehicle</button></div>
+    <div style="display:grid;gap:10px;justify-items:end"><div class="chips" id="ochips" role="group" aria-label="Filter by country of make"></div><div class="chips" id="chips" role="group" aria-label="Filter by body type"></div></div>
+  </div>
+  <div class="tools"><input id="q" type="search" placeholder="Search BMW, Audi, Swift..." aria-label="Search vehicles"><select id="sort" aria-label="Sort vehicles"><option value="def">Featured</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="new">Newest first</option></select></div>
+  <div class="brands" id="brands"></div>
+  <div class="cards" id="cards"></div>
+</div></section>
+
+<section id="desk" style="padding-top:0"><div class="wrap">
+  <h2>Enquiry desk</h2>
+  <p class="lead">Every enquiry in one place. Update the status as you follow up, or delete it when it is done.</p>
+  <div class="desk" id="desktbl"></div>
+</div></section>
+
+<div class="wrap"><footer><div><b>Made by kalyan-engineer25</b><br>Mechanical Engineering, Rajalakshmi Institute of Technology</div><div>Built with Java, JDBC and MySQL<br><a href="https://github.com/YOUR-USERNAME/vehicle-enquiry-management-system" target="_blank" rel="noopener">Source code on GitHub</a></div></footer></div>
+
+<dialog id="dlg"><form method="dialog" id="frm">
+  <h3 id="dtitle">Enquire</h3><p>This adds a row to the Enquiry table.</p>
+  <label for="fn">Your name</label><input id="fn" required maxlength="60">
+  <label for="fp">Phone</label><input id="fp" required maxlength="15" inputmode="tel">
+  <label for="fm">Message</label><textarea id="fm" rows="3" maxlength="200">Is the price negotiable?</textarea>
+  <div class="acts"><button type="button" class="btn alt" id="cancel">Cancel</button><button class="btn" id="send">Send enquiry</button></div>
+</form></dialog>
+
+<dialog id="dlg2"><form method="dialog" id="frm2">
+  <h3>List a vehicle</h3><p>Adds a new vehicle to the stock.</p>
+  <label for="vn">Vehicle name</label><input id="vn" required maxlength="50" placeholder="BMW X3">
+  <div class="g2"><div><label for="vy">Year</label><input id="vy" type="number" min="1990" max="2026" required></div><div><label for="vp">Price (INR)</label><input id="vp" type="number" min="1" required></div></div>
+  <div class="g2"><div><label for="vk">KM driven</label><input id="vk" type="number" min="0" required></div><div><label for="vf">Fuel</label><select id="vf"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div></div>
+  <div class="g2"><div><label for="vt">Body type</label><select id="vt"><option value="hatch">Hatchback</option><option value="sedan">Sedan</option><option value="suv">SUV</option></select></div><div><label for="vo">Made in</label><select id="vo"><option value="in">India</option><option value="de">Germany</option><option value="jp">Japan</option><option value="kr">Korea</option><option value="us">International</option></select></div></div>
+  <div class="acts"><button type="button" class="btn alt" id="cancel2">Cancel</button><button class="btn">Add to stock</button></div>
+</form></dialog>
+<script>
+var V=[
+{id:1,n:'Maruti Swift',t:'hatch',c:'#b3261e',o:'in',y:2018,f:'Petrol',km:42000,p:430000,s:'Available',img:'marutiswift'},
+{id:2,n:'Tata Nexon',t:'suv',c:'#1f7a6d',o:'in',y:2021,f:'Petrol',km:18000,p:920000,s:'Available',img:'tatanexon'},
+{id:3,n:'Mahindra XUV700',t:'suv',c:'#6b1f2a',o:'in',y:2022,f:'Diesel',km:21000,p:1750000,s:'Available',img:'mahindraxuv700'},
+{id:4,n:'Tata Harrier',t:'suv',c:'#3a4a3e',o:'in',y:2021,f:'Diesel',km:27000,p:1450000,s:'Available',img:'tataharrier'},
+{id:5,n:'Mahindra Thar',t:'suv',c:'#a8412a',o:'in',y:2021,f:'Diesel',km:22000,p:1380000,s:'Available',img:'mahindrathar'},
+{id:6,n:'Maruti Baleno',t:'hatch',c:'#7d8a96',o:'in',y:2020,f:'Petrol',km:31000,p:640000,s:'Available',img:'marutibaleno'},
+{id:7,n:'Maruti Brezza',t:'suv',c:'#8b2e2e',o:'in',y:2019,f:'Petrol',km:46000,p:780000,s:'Available',img:'marutibrezza'},
+{id:8,n:'Tata Altroz',t:'hatch',c:'#d4a62a',o:'in',y:2021,f:'Petrol',km:19000,p:640000,s:'Available',img:'tataaltroz'},
+{id:9,n:'BMW 3 Series',t:'sedan',c:'#1c3f7a',o:'de',y:2019,f:'Petrol',km:34000,p:2890000,s:'Available',img:'bmw3series'},
+{id:10,n:'BMW X1',t:'suv',c:'#e9e6df',o:'de',y:2020,f:'Diesel',km:31000,p:3250000,s:'Available',img:'bmwx1'},
+{id:11,n:'BMW 5 Series',t:'sedan',c:'#2a2f33',o:'de',y:2018,f:'Diesel',km:58000,p:3850000,s:'Available',img:'bmw5series'},
+{id:12,n:'BMW X5',t:'suv',c:'#0e2a47',o:'de',y:2019,f:'Diesel',km:44000,p:5400000,s:'Available',img:'bmwx5'},
+{id:13,n:'Audi Q5',t:'suv',c:'#5d6368',o:'de',y:2018,f:'Diesel',km:52000,p:3150000,s:'Available',img:'audiq5'},
+{id:14,n:'Audi A4',t:'sedan',c:'#8d949a',o:'de',y:2019,f:'Petrol',km:39000,p:2850000,s:'Available',img:'audia4'},
+{id:15,n:'Mercedes C-Class',t:'sedan',c:'#16191b',o:'de',y:2020,f:'Petrol',km:26000,p:3600000,s:'Available',img:'mercedescclass'},
+{id:16,n:'Mercedes E-Class',t:'sedan',c:'#cfd2d4',o:'de',y:2018,f:'Diesel',km:62000,p:4100000,s:'Available',img:'mercedeseclass'},
+{id:17,n:'Mercedes GLA',t:'suv',c:'#7a1f2b',o:'de',y:2019,f:'Petrol',km:35000,p:3050000,s:'Available',img:'mercedesgla'},
+{id:18,n:'Volkswagen Polo',t:'hatch',c:'#f3f0e8',o:'de',y:2017,f:'Petrol',km:47000,p:495000,s:'Available',img:'volkswagenpolo'},
+{id:19,n:'Volkswagen Virtus',t:'sedan',c:'#b9c0c6',o:'de',y:2022,f:'Petrol',km:15000,p:1320000,s:'Available',img:'volkswagenvirtus'},
+{id:20,n:'Porsche Macan',t:'suv',c:'#d4b32a',o:'de',y:2018,f:'Petrol',km:41000,p:5900000,s:'Available',img:'porschemacan'},
+{id:21,n:'Honda City',t:'sedan',c:'#9aa0a6',o:'jp',y:2016,f:'Petrol',km:61000,p:525000,s:'Sold',img:'hondacity'},
+{id:22,n:'Honda Amaze',t:'sedan',c:'#a9b0b6',o:'jp',y:2019,f:'Petrol',km:36000,p:580000,s:'Available',img:'hondaamaze'},
+{id:23,n:'Toyota Fortuner',t:'suv',c:'#e9e6df',o:'jp',y:2019,f:'Diesel',km:61000,p:2950000,s:'Available',img:'toyotafortuner'},
+{id:24,n:'Toyota Innova Crysta',t:'suv',c:'#5d6368',o:'jp',y:2020,f:'Diesel',km:48000,p:2150000,s:'Available',img:'toyotainnovacrysta'},
+{id:25,n:'Toyota Camry',t:'sedan',c:'#2a2f33',o:'jp',y:2017,f:'Hybrid',km:57000,p:2250000,s:'Available',img:'toyotacamry'},
+{id:26,n:'Hyundai i20',t:'hatch',c:'#2d4a8a',o:'kr',y:2019,f:'Diesel',km:38500,p:610000,s:'Available',img:'hyundaii20'},
+{id:27,n:'Hyundai Creta',t:'suv',c:'#2a3236',o:'kr',y:2020,f:'Diesel',km:29000,p:1140000,s:'Available',img:'hyundaicreta'},
+{id:28,n:'Hyundai Verna',t:'sedan',c:'#e9e6df',o:'kr',y:2020,f:'Petrol',km:33000,p:920000,s:'Available',img:'hyundaiverna'},
+{id:29,n:'Kia Seltos',t:'suv',c:'#2f6b52',o:'kr',y:2021,f:'Diesel',km:24000,p:1450000,s:'Available',img:'kiaseltos'},
+{id:30,n:'Kia Sonet',t:'suv',c:'#6b1f2a',o:'kr',y:2022,f:'Petrol',km:14000,p:1050000,s:'Available',img:'kiasonet'},
+{id:31,n:'Ford EcoSport',t:'suv',c:'#d9722b',o:'us',y:2017,f:'Diesel',km:58000,p:580000,s:'Available',img:'fordecosport'},
+{id:32,n:'Ford Endeavour',t:'suv',c:'#3d444a',o:'us',y:2018,f:'Diesel',km:68000,p:2450000,s:'Available',img:'fordendeavour'},
+{id:33,n:'Skoda Rapid',t:'sedan',c:'#efece4',o:'us',y:2017,f:'Diesel',km:54000,p:560000,s:'Available',img:'skodarapid'},
+{id:34,n:'Jeep Compass',t:'suv',c:'#7b2a22',o:'us',y:2019,f:'Diesel',km:40000,p:1850000,s:'Available',img:'jeepcompass'},
+{id:35,n:'Volvo XC60',t:'suv',c:'#c8ccd0',o:'us',y:2018,f:'Diesel',km:50000,p:3450000,s:'Available',img:'volvoxc60'},
+{id:36,n:'Renault Duster',t:'suv',c:'#a08a64',o:'us',y:2017,f:'Diesel',km:62000,p:650000,s:'Available',img:'renaultduster'}];
+var E=[{id:1,vid:1,c:'Arun',ph:'9876543210',m:'Is the price negotiable?',s:'Pending'},{id:2,vid:26,c:'Divya',ph:'9840012345',m:'Can I test drive on Saturday?',s:'Contacted'}];
+var fo='all',ORIG={all:'All origins',in:'🇮🇳 Indian',de:'🇩🇪 German',jp:'🇯🇵 Japanese',kr:'🇰🇷 Korean',us:'🌍 International'},filter='all',nextE=3,pick=null,TYPES={all:'All',hatch:'Hatchback',sedan:'Sedan',suv:'SUV'};
+function $(i){return document.getElementById(i)}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function inr(n){return '₹'+n.toLocaleString('en-IN')}
+function ochips(){var w=$('ochips');w.replaceChildren();Object.keys(ORIG).forEach(function(k){var b=el('button','chip',ORIG[k]);b.type='button';b.setAttribute('aria-pressed',k===fo);b.onclick=function(){fo=k;ochips();cards()};w.append(b)})}
+function chips(){var w=$('chips');w.replaceChildren();Object.keys(TYPES).forEach(function(k){var b=el('button','chip',TYPES[k]);b.type='button';b.setAttribute('aria-pressed',k===filter);b.onclick=function(){filter=k;chips();cards()};w.append(b)})}
+var q='',sort='def',BR=['Maruti','Tata','Mahindra','BMW','Audi','Mercedes','Volkswagen','Porsche','Toyota','Honda','Hyundai','Kia','Ford','Jeep','Volvo'],nextV=100;
+function brands(){var w=$('brands');w.replaceChildren();['All brands'].concat(BR).forEach(function(b,i){var x=el('button','',b);x.type='button';x.setAttribute('aria-pressed',(i===0&&q==='')||b.toLowerCase()===q.toLowerCase());x.onclick=function(){q=i===0?'':b;$('q').value=q;brands();cards()};w.append(x)})}
+function stats(){$('fa').textContent=V.length;$('fb').textContent=V.filter(function(v){return v.s==='Available'}).length;$('fc').textContent=E.filter(function(e){return e.s!=='Closed'}).length;var u={};V.forEach(function(v){u[v.n.split(' ')[0]]=1});$('fd').textContent=Object.keys(u).length}
+function cards(){var w=$('cards');w.replaceChildren();
+ var L=V.filter(function(v){return (filter==='all'||v.t===filter)&&(fo==='all'||v.o===fo)&&v.n.toLowerCase().indexOf(q.toLowerCase())>-1});
+ if(sort==='lo')L.sort(function(a,b){return a.p-b.p});if(sort==='hi')L.sort(function(a,b){return b.p-a.p});if(sort==='new')L.sort(function(a,b){return b.y-a.y});
+ if(!L.length){w.append(el('div','empty','No vehicles match. Try another filter.'))}
+ L.forEach(function(v){
+  var c=el('article','card');
+  c.innerHTML='<div class="photo"><span class="badge'+(v.s==='Sold'?' sold':'')+'">'+v.s+'</span><svg viewBox="0 0 400 160" style="--c:'+v.c+'" role="img" aria-label="Illustration of '+v.n+'"><use href="#'+v.t+'"/></svg><img src="images/'+v.img+'.jpg" alt="'+v.n+'" onerror="this.remove()"></div>';
+  var i=el('div','info');i.append(el('h3','',v.n));
+  var m=el('div','meta');[ORIG[v.o],v.y,v.f,v.km.toLocaleString('en-IN')+' km'].forEach(function(x){m.append(el('span','',String(x)))});i.append(m);
+  var ad=el('div','admin'),t=el('button','',v.s==='Sold'?'Mark available':'Mark sold'),rm=el('button','','Remove');t.type=rm.type='button';
+  t.onclick=function(){v.s=v.s==='Sold'?'Available':'Sold';cards();stats()};
+  rm.onclick=function(){V=V.filter(function(x){return x!==v});E=E.filter(function(e){return e.vid!==v.id});cards();desk();stats()};
+  ad.append(t,rm);i.append(ad);
+  var p=el('div','price');p.append(el('b','',inr(v.p)));
+  var b=el('button','btn',v.s==='Sold'?'Sold':'Enquire');b.type='button';b.disabled=v.s==='Sold';b.onclick=function(){pick=v;$('dtitle').textContent='Enquire about '+v.n;$('dlg').showModal()};
+  p.append(b);i.append(p);c.append(i);w.append(c)});stats()}
+function desk(){var w=$('desktbl');w.replaceChildren();stats();
+ var h=el('div','row head');['Customer','Vehicle','Message','Status',''].forEach(function(x){h.append(el('span','',x))});w.append(h);
+ if(!E.length){w.append(el('div','empty','No enquiries yet. Press Enquire on a vehicle.'));return}
+ E.forEach(function(q){var v=V.filter(function(x){return x.id===q.vid})[0],r=el('div','row');
+  var a=el('div');a.append(el('b','',q.c),el('small','',q.ph));
+  var s=el('select');['Pending','Contacted','Closed'].forEach(function(o){var op=el('option','',o);op.selected=o===q.s;s.append(op)});s.setAttribute('aria-label','Status for '+q.c);s.onchange=function(){q.s=s.value};
+  var d=el('button','del','✕');d.type='button';d.setAttribute('aria-label','Delete enquiry from '+q.c);d.onclick=function(){E=E.filter(function(x){return x!==q});desk()};
+  r.append(a,el('span','',v?v.n:''),el('span','',q.m),s,d);w.append(r)})}
+$('cancel').onclick=function(){$('dlg').close()};
+$('frm').onsubmit=function(){E.push({id:nextE++,vid:pick.id,c:$('fn').value.trim(),ph:$('fp').value.trim(),m:$('fm').value.trim(),s:'Pending'});desk();$('frm').reset();$('fm').value='Is the price negotiable?'};
+$('q').oninput=function(){q=this.value.trim();brands();cards()};
+$('sort').onchange=function(){sort=this.value;cards()};
+$('addv').onclick=function(){$('dlg2').showModal()};
+$('cancel2').onclick=function(){$('dlg2').close()};
+var COL={hatch:['#b3261e','#2d4a8a','#7d8a96'],sedan:['#1c3f7a','#2a2f33','#9aa0a6'],suv:['#1f7a6d','#3a4a3e','#5d6368']};
+$('frm2').onsubmit=function(){var t=$('vt').value,n=$('vn').value.trim();V.unshift({id:nextV++,n:n,t:t,c:COL[t][Math.floor(Math.random()*3)],o:$('vo').value,y:+$('vy').value,f:$('vf').value,km:+$('vk').value,p:+$('vp').value,s:'Available',img:n.toLowerCase().replace(/[^a-z0-9]+/g,'')});cards();$('frm2').reset()};
+ochips();chips();brands();cards();desk();
+</script>
+</body>
+</html>
